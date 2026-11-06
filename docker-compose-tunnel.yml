@@ -1,0 +1,15 @@
+name: preflight
+services:
+  cloudflare-tunnel:
+    image: cloudflare/cloudflared:latest
+    container_name: pf-tunnel
+    restart: always
+    command: tunnel --no-autoupdate run --url http://host.docker.internal:${PORT:-3001} --token ${CF_TUNNEL_TOKEN}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      - CF_TUNNEL_TOKEN=${CF_TUNNEL_TOKEN}
+      - PORT=${PORT:-3001}
+networks:
+  preflight_pf-net: # Check by using `docker network ls` command
+    external: true

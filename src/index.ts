@@ -25,6 +25,10 @@ app.use(
 // Extracts the entire body portion of an incoming request stream and exposes it on req.body.
 app.use(express.json());
 
+app.get("/", (req, res) => {
+  res.send("It works!");
+});
+
 // Query
 app.get("/todo", async (req, res, next) => {
   try {
