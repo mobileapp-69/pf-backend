@@ -1,6 +1,6 @@
-# Preflight - Database
+# Preflight Backend
 
-## Setup
+## Database Setup
 
 - `pnpm install`
 - Create `.env` from `.env.example`
@@ -9,54 +9,26 @@
   - `chmod +x ./scripts/*.sh` to make scripts executable (Linux/Mac)
   - `docker compose --env-file ./.env -f docker-compose-db.yml up -d` to start the database
 
-## Usage
+## Drizzle Setup
 
 - `pnpm run db:push`
 - `pnpm run db:generate`
 - `pnpm run db:migrate`
 - `pnpm run db:prototype`
 
-## Two-tsconfig Setup
+# Setup Express.js Backend
 
-Right now the `drizzle.config.ts` file will be included in the `dist` folder when building the app, which is not ideal. To fix this, we have two `tsconfig` files:
-
-- `tsconfig.json (type-check / IDE)`
-
-```
-{
-  "extends": [
-    "@tsconfig/node-lts/tsconfig.json",
-    "@tsconfig/node-ts/tsconfig.json"
-  ],
-  "compilerOptions": {
-    "types": ["node"],
-    "rootDir": ".",
-    "outDir": "./dist",
-    "paths": {
-      "@db/*": ["./db/*"]
-    }
-  },
-  "include": ["./db/**/*", "./drizzle.config.ts"]
-}
-```
-
-- `tsconfig.build.json (emit only app code)`
-
-```
-{
-  "extends": "./tsconfig.json",
-  "exclude": ["./drizzle.config.ts"]
-}
-```
-
-# Setup
-
-- Make sure that you already have DB running from `pf-db` project.
-- Make `.env` from `.env.example` (fillin the password)
+- Make sure that you already have DB running
 - `pnpm install`
 - `pnpm run dev`
 
-# Containerization and test
+# Cloudflare Tunnel
+
+- Fill in the `.env` file with your Cloudflare Tunnel credentials
+- `docker compose --env-file ./.env -f docker-compose-tunnel.yml up -d`
+- `docker compose --env-file ./.env -f docker-compose-tunnel.yml down`
+
+# Containerization (Express.js appplication) and test
 
 - Make `.env.test` from `.env.test.example`
 - `docker compose --env-file ./.env.test -f docker-compose-backend.yml up -d --force-recreate --build`
@@ -65,7 +37,3 @@ Right now the `drizzle.config.ts` file will be included in the `dist` folder whe
 
 - `docker tag preflight-backend [DOCKERHUB_ACCOUNT]/preflight-backend:latest`
 - `docker push [DOCKERHUB_ACCOUNT]/preflight-backend:latest`
-
-# Tunnel
-
-`docker compose --env-file ./.env -f docker-compose-tunnel.yml up -d`

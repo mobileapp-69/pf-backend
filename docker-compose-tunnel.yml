@@ -10,6 +10,8 @@ services:
     environment:
       - CF_TUNNEL_TOKEN=${CF_TUNNEL_TOKEN}
       - PORT=${PORT:-3001}
+    networks:
+      - preflight_pf-net
 networks:
   preflight_pf-net: # Check by using `docker network ls` command
     external: true
